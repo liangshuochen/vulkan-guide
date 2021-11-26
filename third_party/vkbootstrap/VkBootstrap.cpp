@@ -289,7 +289,8 @@ void destroy_debug_utils_messenger (
 	}
 }
 
-VkBool32 default_debug_callback (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+//VkBool32 default_debug_callback (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+VKAPI_ATTR VkBool32 VKAPI_CALL default_debug_callback (VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
     VkDebugUtilsMessageTypeFlagsEXT messageType,
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void*) {
@@ -550,7 +551,7 @@ bool SystemInfo::is_layer_available (const char* layer_name) const {
 
 void destroy_instance (Instance instance) {
 	if (instance.instance != VK_NULL_HANDLE) {
-		if (instance.debug_messenger != nullptr)
+		if (instance.debug_messenger != VK_NULL_HANDLE)
 			destroy_debug_utils_messenger (instance.instance, instance.debug_messenger, instance.allocation_callbacks);
 		detail::vulkan_functions ().fp_vkDestroyInstance (instance.instance, instance.allocation_callbacks);
 	}
@@ -1089,7 +1090,7 @@ PhysicalDeviceSelector::PhysicalDeviceSelector (Instance const& instance) {
 
 detail::Result<PhysicalDevice> PhysicalDeviceSelector::select () const {
 	if (!system_info.headless && !criteria.defer_surface_initialization) {
-		if (system_info.surface == nullptr)
+		if (system_info.surface == VK_NULL_HANDLE)
 			return detail::Result<PhysicalDevice>{ PhysicalDeviceError::no_surface_provided };
 	}
 

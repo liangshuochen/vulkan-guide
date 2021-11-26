@@ -6,6 +6,14 @@
 #include <vk_types.h>
 
 class VulkanEngine {
+
+public:
+	VkInstance _instance;	// Vulkan library handle
+	VkDebugUtilsMessengerEXT _debug_messenger;
+	VkPhysicalDevice _chosenGPU;
+	VkDevice _device;	// Vulkan device for commands
+	VkSurfaceKHR _surface;		// Vulkan window surface
+
 public:
 
 	bool _isInitialized{ false };
@@ -26,4 +34,7 @@ public:
 
 	//run main loop
 	void run();
+
+private:
+	void init_vulkan();
 };

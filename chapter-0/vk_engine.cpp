@@ -7,6 +7,21 @@
 #include <vk_types.h>
 #include <vk_initializers.h>
 
+#include "VkBootstrap.h"
+
+//we want to immediately abort when there is an error. In normal engines this would give an error message to the user, or perform a dump of state.
+using namespace std;
+#define VK_CHECK(x)                                                 \
+	do                                                              \
+	{                                                               \
+		VkResult err = x;                                           \
+		if (err)                                                    \
+		{                                                           \
+			std::cout <<"Detected Vulkan error: " << err << std::endl; \
+			abort();                                                \
+		}                                                           \
+	} while (0)
+
 void VulkanEngine::init()
 {
 	// We initialize SDL and create a window with it. 
@@ -23,9 +38,17 @@ void VulkanEngine::init()
 		window_flags
 	);
 	
+	init_vulkan();
+
 	//everything went fine
 	_isInitialized = true;
 }
+
+void VulkanEngine::init_vulkan()
+{
+
+}
+
 void VulkanEngine::cleanup()
 {	
 	if (_isInitialized) {
